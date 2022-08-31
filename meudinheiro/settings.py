@@ -136,7 +136,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static files'#alterado / usado apenas em produção
-STATICFILES_DIR = [#alterado
+STATICFILES_DIRS = [#alterado
     BASE_DIR / 'static',#alterado / em desenvolvimento
 ]#alterado
 
