@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.shortcuts import render, redirect
 
 from .forms import CategoriaForm
-
+from .models import Categoria
 
 # Create your views here.
 def principal(request):
@@ -27,4 +27,15 @@ def nova_categoria(request):
     else:
         form = CategoriaForm()
     context['form'] = form
+    return render(request, template_name, context)
+
+
+def lista_categorias(request):
+    template_name = 'geral/lista_categorias.html'
+    #categorias = Categoria.objects.all() #SQL: SELECT * FROM geral_categoria; <-- tudo independente do dono
+    #SQL SELECT * FROM geral_categoria WHERE usuario = 'admin';
+    categorias = Categoria.objects.filter(usuario=request.user)#<-- somente o usuário admin
+    context={
+        'categorias': categorias,
+    }
     return render(request, template_name, context)
