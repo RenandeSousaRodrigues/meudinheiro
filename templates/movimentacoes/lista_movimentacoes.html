@@ -12,23 +12,27 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nome</th>
                             <th scope="col">Descrição</th>
+                            <th scope="col">Discriminação</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col">Data</th>
                             <th scope="col">Tipo</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for categoria in categorias %}
+                        {% for movimentacao in movimentacao %}
                             <tr>
-                                <th scope="row">{{ categoria.id }}</th>
-                                <td>{{ categoria.nome }}</td>
-                                <td>{{ categoria.descricao }}</td>
-                                <td>{{ categoria.get_tipo_display }}</td>
+                                <th scope="row">{{ movimentacao.id }}</th>
+                                <td>{{ movimentacao.descricao }}</td>
+                                <td>{{ movimentacao.discriminacao }}</td>
+                                <td>{{ movimentacao.valor }}</td>
+                                <td>{{ movimentacao.data_criacao }}</td>
+                                <td>{{ movimentacao.get_tipo_display }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-                <a class="btn btn-outline-primary" href="{% url 'geral:nova_categoria' %}">Nova Categoria</a>
+                <a class="btn btn-outline-primary" href="">Nova Movimentação</a>
             </div>
         </div>
     </div>
