@@ -53,7 +53,7 @@ def editar_movimentacao(request, pk):
     context['form'] = form
     return render(request, template_name, context)
 
-def apagar(request, pk):
+def apagar_movimentacao(request, pk):
     movimentacao = get_object_or_404(Movimentacao, pk=pk)
     movimentacao.delete()
     return redirect('movimentacoes:lista_movimentacoes')
