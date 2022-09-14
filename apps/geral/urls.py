@@ -11,6 +11,6 @@ urlpatterns=[
     path('categorias/', views.lista_categorias, name='lista_categorias'),
     path('login/', views.login_usuario, name='login_usuario'),
     path('logout/', views.logout_usuario, name='logout_usuario'),
+    path('novo-usuario/', views.novo_usuario, name='novo_usuario'),
     path('', views.principal, name='principal'),#sempre será o ultimo pq ele tem a permissão maior que as demais
-
 ]

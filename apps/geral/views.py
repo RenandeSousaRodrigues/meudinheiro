@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 
 
-from .forms import CategoriaForm, LoginForms
+from .forms import CategoriaForm, LoginForms, UserForm
 from .models import Categoria
 
 # Create your views here.
@@ -30,10 +30,31 @@ def login_usuario(request):
                 messages.error(request, 'Usuário ou senha inválido')
                 return redirect('geral:login_usuario')
     else:
-        form=LoginForms()
+        form = LoginForms()
     context['form'] = form
     return render(request, template_name, context)
 
+
+def novo_usuario(request):
+    template_name = 'geral/novo_usuario.html'
+    context = {}
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        if form.is_valid():
+            f = form.save(commit=False)
+            f.set_password(f.password)  # cria um hash da senha
+            f.save()
+            messages.success(request, 'Usuário criado com sucesso')
+            return redirect('geral:login_usuario')
+        else:
+            messages.error(request, 'Corrija os erros do seu formulário')
+            form = UserForm(request.POST)
+            context['form'] = form
+            return render(request, template_name, context)
+    else:
+        form = UserForm()
+    context['form'] = form
+    return render(request, template_name, context)
 
 def logout_usuario(request):
     logout(request)
@@ -42,7 +63,7 @@ def logout_usuario(request):
 
 @login_required
 def nova_categoria(request):
-    template_name = 'geral/nova_categoria.html' #nome do html que vai ser exibido
+    template_name = 'geral/nova_categoria.html' # nome do html que vai ser exibido
     context = {}
     if request.method == 'POST':
         form = CategoriaForm(request.POST)

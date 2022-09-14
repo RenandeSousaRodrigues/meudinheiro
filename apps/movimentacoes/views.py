@@ -21,7 +21,7 @@ def nova_movimentacao(request):
     template_name = 'movimentacoes/nova_movimentacao.html'
     context = {}
     if request.method == 'POST':
-        form = MovimentacaoFomr(request.POST)
+        form = MovimentacaoFomr(data=request.POST, usuario=request.POST)
         if form.is_valid():
             f = form.save(commit=False)
             f.usuario = request.user
@@ -32,7 +32,7 @@ def nova_movimentacao(request):
             form = MovimentacaoFomr(request.POST)
             context['form'] = form
     else:
-        form = MovimentacaoFomr()
+        form = MovimentacaoFomr(usuario=request.user)
     context['form'] = form
     return render(request, template_name, context)
 @login_required
@@ -41,16 +41,16 @@ def editar_movimentacao(request, pk):
     context = {}
     movimentacao = get_object_or_404(Movimentacao, pk=pk)
     if request.method == 'POST':
-        form = MovimentacaoFomr(data=request.POST, instance=movimentacao)
+        form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
         if form.is_valid():
             form.save()
             messages.success(request, 'Movimentação alterada com sucesso.')
             return redirect('movimentacoes:lista_movimentacoes')
         else:
-            form = MovimentacaoFomr(instance=movimentacao)
+            form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
             context['form'] = form
     else:
-        form = MovimentacaoFomr(instance=movimentacao)
+        form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
     context['form'] = form
     return render(request, template_name, context)
 @login_required
