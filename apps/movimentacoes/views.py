@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 
-from .forms import MovimentacaoFomr
+from .forms import MovimentacaoForm
 from .models import Movimentacao
 
 # Create your views here.
@@ -21,7 +21,7 @@ def nova_movimentacao(request):
     template_name = 'movimentacoes/nova_movimentacao.html'
     context = {}
     if request.method == 'POST':
-        form = MovimentacaoFomr(data=request.POST, usuario=request.POST)
+        form = MovimentacaoForm(data=request.POST, usuario=request.user)
         if form.is_valid():
             f = form.save(commit=False)
             f.usuario = request.user
@@ -29,10 +29,10 @@ def nova_movimentacao(request):
             messages.success(request, 'Movimentação salva com sucesso')
             return redirect('movimentacoes:lista_movimentacoes')
         else:
-            form = MovimentacaoFomr(request.POST)
+            form = MovimentacaoForm(data=request.POST, usuario=request.user)
             context['form'] = form
     else:
-        form = MovimentacaoFomr(usuario=request.user)
+        form = MovimentacaoForm(usuario=request.user)
     context['form'] = form
     return render(request, template_name, context)
 @login_required
@@ -41,16 +41,16 @@ def editar_movimentacao(request, pk):
     context = {}
     movimentacao = get_object_or_404(Movimentacao, pk=pk)
     if request.method == 'POST':
-        form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
+        form = MovimentacaoForm(data=request.POST, usuario=request.user, instance=movimentacao)
         if form.is_valid():
             form.save()
             messages.success(request, 'Movimentação alterada com sucesso.')
             return redirect('movimentacoes:lista_movimentacoes')
         else:
-            form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
+            form = MovimentacaoForm(data=request.POST, usuario=request.user, instance=movimentacao)
             context['form'] = form
     else:
-        form = MovimentacaoFomr(data=request.POST, usuario=request.POST, instance=movimentacao)
+        form = MovimentacaoForm(data=request.POST, usuario=request.user, instance=movimentacao)
     context['form'] = form
     return render(request, template_name, context)
 @login_required

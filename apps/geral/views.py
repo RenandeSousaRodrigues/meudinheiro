@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
-
+from movimentacoes.models import Movimentacao
 from .forms import CategoriaForm, LoginForms, UserForm
 from .models import Categoria
 
@@ -87,7 +88,18 @@ def lista_categorias(request):
     #categorias = Categoria.objects.all() #SQL: SELECT * FROM geral_categoria; <-- tudo independente do dono
     #SQL SELECT * FROM geral_categoria WHERE usuario = 'admin';
     categorias = Categoria.objects.filter(usuario=request.user)#<-- somente o usuário admin
-    context={
+    context = {
         'categorias': categorias,
+    }
+    return render(request, template_name, context)
+
+
+def relatorio(request):
+    template_name = 'geral/relatorio.html'
+    data_inicial = request.GET.get('data_incial', timezone.now())
+    data_final = request.GET.get('data_final', timezone.now())
+    movimentacoes = Movimentacao.objects.filter(usuario=request.user, data_criacao__gte=data_inicial, data_criacao__lte=data_final)#lookup
+    context = {
+        'movimentacoes': movimentacoes,
     }
     return render(request, template_name, context)
